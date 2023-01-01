@@ -1,10 +1,10 @@
-# meronbooks-check
+# melonbooks-check
 
 It monitors sale-state at [Melonbooks](https://www.melonbooks.co.jp) and notifies you if there are any changes.
 
 ## Configuration
 
-File: `data/config.json`
+File: `/data/config.json`
 
 - `discordWebhookUrl`: Discord Webhook URL to notify
 - `targets`: Product ID in Melonbooks
