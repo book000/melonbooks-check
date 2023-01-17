@@ -13,4 +13,6 @@ WORKDIR /app
 COPY main.php .
 COPY entrypoint.sh .
 
+RUN chmod a+x entrypoint.sh
+
 ENTRYPOINT [ "/app/entrypoint.sh" ]
