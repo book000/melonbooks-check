@@ -1,53 +1,41 @@
-# DockerHub に Docker image を公開する。（Release イベント駆動）
-# Secrets の DOCKER_USERNAME と DOCKER_PASSWORD を設定する必要あり（DOCKER_USERNAME はトークン）
+# 任意のレジストリに Docker image を公開orビルドする。
+# プルリクの作成・更新時に動作する。
 
-name: Docker Publish
+name: Docker
 
 on:
-  release:
+  pull_request:
+    branches:
+      - main
+      - master
     types:
-      - published
+      - opened
+      - synchronize
+    paths:
+      - .github/workflows/docker.yml
+  pull_request_target:
+    branches:
+      - main
+      - master
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - closed
 
-env:
-  IMAGE_NAME: ${{ github.repository }}
-  PLATFORMS: linux/amd64,linux/arm64
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.merged == true && 'master' || github.event.pull_request.head.sha }}
 
 jobs:
-  publish:
-    name: Push Docker image
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v2.1.0
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v4.1.1
-        with:
-          images: ${{ env.IMAGE_NAME }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v3.2.0
-        with:
-          context: .
-          push: true
-          platforms: ${{ env.PLATFORMS }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+  docker-ci:
+    name: Docker CI
+    uses: book000/templates/.github/workflows/reusable-docker.yml@master
+    with:
+      targets: >-
+        [
+          { imageName: "book000/melonbooks-check", context: ".", file: "Dockerfile", packageName: "melonbooks-check" }
+        ]
+      registry: registry.hub.docker.com
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
