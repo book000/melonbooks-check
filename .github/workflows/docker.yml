@@ -24,7 +24,7 @@ on:
       - closed
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.merged == true && 'master' || github.event.pull_request.head.sha }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.merged == true && github.base_ref || github.event.pull_request.head.sha }}
 
 jobs:
   docker-ci:
@@ -35,7 +35,6 @@ jobs:
         [
           { imageName: "book000/melonbooks-check", context: ".", file: "Dockerfile", packageName: "melonbooks-check" }
         ]
-      registry: registry.hub.docker.com
     secrets:
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      DOCKER_USERNAME: ${{ github.actor }}
+      DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
