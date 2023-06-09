@@ -1,18 +1,37 @@
-FROM php:7.4-cli
-
-# /etc/ssl/openssl.cnf の CipherString = DEFAULT@SECLEVEL=2 をコメントアウトする
-
-# hadolint ignore=DL3008
-RUN sed -i -e 's/^CipherString/#CipherString/' /etc/ssl/openssl.cnf && \
-  apt-get update && \
-  apt-get install -y --no-install-recommends libonig-dev && \
-  rm -rf /var/lib/apt/lists/* && \
-  docker-php-ext-install mbstring
+FROM node:20-alpine as builder
 
 WORKDIR /app
-COPY main.php .
-COPY entrypoint.sh .
 
-RUN chmod a+x entrypoint.sh
+COPY package.json .
+COPY yarn.lock .
 
-ENTRYPOINT [ "/app/entrypoint.sh" ]
+RUN echo network-timeout 600000 > .yarnrc && \
+  yarn install --frozen-lockfile && \
+  yarn cache clean
+
+COPY src src
+COPY tsconfig.json .
+
+RUN yarn package
+
+FROM node:20-alpine as runner
+
+# hadolint ignore=DL3018
+RUN apk update && \
+  apk upgrade && \
+  apk add --update --no-cache tzdata && \
+  cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
+  echo "Asia/Tokyo" > /etc/timezone && \
+  apk del tzdata
+
+WORKDIR /app
+
+COPY --from=builder /app/output .
+
+ENV NODE_ENV production
+ENV CONFIG_PATH /data/config.json
+ENV STOCK_PATH /data/stocks.json
+
+VOLUME [ "/data" ]
+
+ENTRYPOINT [ "node", "index.js" ]
