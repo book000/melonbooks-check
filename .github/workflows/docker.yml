@@ -35,6 +35,7 @@ jobs:
         [
           { imageName: "book000/melonbooks-check", context: ".", file: "Dockerfile", packageName: "melonbooks-check" }
         ]
+      registry: registry.hub.docker.com
     secrets:
       DOCKER_USERNAME: ${{ github.actor }}
       DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
