@@ -4,26 +4,30 @@ import { MelonBooks } from './melon-books'
 import fs from 'node:fs'
 
 function getPreviousStock(itemId: string): string | null {
-  const stockPath = process.env.STOCK_PATH || './data/stocks.json'
+  const stockPath = process.env.STOCK_PATH ?? './data/stocks.json'
   if (!fs.existsSync(stockPath)) {
     return null
   }
 
-  const stock = JSON.parse(fs.readFileSync(stockPath, 'utf8'))
+  const stock: Record<string, string | undefined> = JSON.parse(
+    fs.readFileSync(stockPath, 'utf8')
+  )
   if (itemId in stock) {
-    return stock[itemId]
+    return stock[itemId] ?? null
   }
 
   return null
 }
 
 function setPreviousStock(itemId: string, stock: string): void {
-  const stockPath = process.env.STOCK_PATH || './data/stock.json'
+  const stockPath = process.env.STOCK_PATH ?? './data/stock.json'
   if (!fs.existsSync(stockPath)) {
     fs.writeFileSync(stockPath, '{}')
   }
 
-  const previousStock = JSON.parse(fs.readFileSync(stockPath, 'utf8'))
+  const previousStock: Record<string, string | undefined> = JSON.parse(
+    fs.readFileSync(stockPath, 'utf8')
+  )
   previousStock[itemId] = stock
   fs.writeFileSync(stockPath, JSON.stringify(previousStock))
 }
@@ -73,10 +77,6 @@ async function main() {
     setPreviousStock(target, book.stock)
 
     const discordWebhookUrl = config.get('discordWebhookUrl')
-    if (discordWebhookUrl === undefined) {
-      logger.error('❌ discordWebhookUrl is undefined')
-      continue
-    }
 
     const discord = new Discord({
       webhookUrl: discordWebhookUrl,
