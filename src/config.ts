@@ -6,7 +6,7 @@ interface Configuration {
 }
 
 export class MelonBooksCheckConfiguration extends ConfigFramework<Configuration> {
-  protected validates(): { [key: string]: (config: Configuration) => boolean } {
+  protected validates(): Record<string, (config: Configuration) => boolean> {
     return {
       'discordWebhookUrl is required': (config: Configuration) =>
         'discordWebhookUrl' in config,

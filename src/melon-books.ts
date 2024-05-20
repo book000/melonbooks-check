@@ -66,6 +66,7 @@ export class MelonBooks {
   }
 
   toString(): string {
-    return `MelonBooks { itemId: ${this.itemId}; title: ${this._title}; notes: ${this._notes}; authorName: ${this._authorName}; price: ${this._price}; stock: ${this._stock} }`
+    const notes = this._notes ? `[${this._notes.join(', ')}]` : 'undefined'
+    return `MelonBooks { itemId: ${this.itemId}; title: ${this._title}; notes: ${notes}; authorName: ${this._authorName}; price: ${this._price}; stock: ${this._stock} }`
   }
 }
