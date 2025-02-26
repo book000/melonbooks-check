@@ -16,10 +16,10 @@
   resolved "https://registry.yarnpkg.com/@babel/helper-validator-identifier/-/helper-validator-identifier-7.25.9.tgz#24b64e2c3ec7cd3b3c547729b8d16871f22cbdc7"
   integrity sha512-Ed61U6XJc3CVRfkERJWDz4dJwKe7iLmmJsbOGu9wSloNSFttHV0I8g6UAgb7qnK5ly5bGLPd4oXZlxCdANBOWQ==
 
-"@book000/eslint-config@1.8.11":
-  version "1.8.11"
-  resolved "https://registry.yarnpkg.com/@book000/eslint-config/-/eslint-config-1.8.11.tgz#5eeeb3fd150482cfc7f20f9fd4363ccbea30452c"
-  integrity sha512-f/Vkz2K3ZbjWKmVsfNqHqp1c+OHvHd56wN+LzmIuIFe6T5GvyAWOWUb1Ubze17ejSNk3fSnQdGaNtWlky9YemA==
+"@book000/eslint-config@1.8.12":
+  version "1.8.12"
+  resolved "https://registry.yarnpkg.com/@book000/eslint-config/-/eslint-config-1.8.12.tgz#cd51c943122b564fde903aa1e2be5d477b400790"
+  integrity sha512-MsF1IZAw78GxlHsZC0EQOG7gbWNWtINZUyyNEFTGmNOUq4zJY2LnYKxVizxIvw/G1X7mzfYAMvOXMeSQ9IjTBg==
   dependencies:
     "@eslint/eslintrc" "3.3.0"
     "@typescript-eslint/parser" "8.25.0"
@@ -491,15 +491,6 @@ available-typed-arrays@^1.0.7:
   integrity sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==
   dependencies:
     possible-typed-array-names "^1.0.0"
-
-axios@1.8.0:
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.8.0.tgz#f68607ed4caf0f741ef084949ebb6f3d973c6837"
-  integrity sha512-AS3x1klSQ4VeoeAaOyITVjomjITxIRgpKVgAXhE8QFJiNiYliuU+cW0p7XpqvlwNKmiwE57aNEyhPtsfAxERqg==
-  dependencies:
-    follow-redirects "^1.15.6"
-    form-data "^4.0.0"
-    proxy-from-env "^1.1.0"
 
 axios@1.8.1:
   version "1.8.1"
